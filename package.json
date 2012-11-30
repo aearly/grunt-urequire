@@ -21,7 +21,8 @@
   "license": "BSD",
   "devDependencies": {
     "grunt": "~0.3.17",
-    "mocha": "~1.7.2"
+    "mocha": "~1.7.2",
+    "expect.js": "~0.2.0"
   },
   "dependencies": {
     "urequire": "~0.2.7"
