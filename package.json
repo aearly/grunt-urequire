@@ -1,0 +1,29 @@
+{
+  "name": "grunt-urequire",
+  "version": "0.0.1",
+  "description": "A Grunt wrapper around uRequire <https://github.com/anodynos/uRequire>",
+  "main": "tasks/urequire.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aearly/grunt-urequire"
+  },
+  "keywords": [
+    "grunt",
+    "urequire",
+    "umd",
+    "amd",
+    "commonjs"
+  ],
+  "author": "Alexander Early <alexander.early@gmail.com>",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "~0.3.17",
+    "mocha": "~1.7.2"
+  },
+  "dependencies": {
+    "urequire": "~0.2.7"
+  }
+}
