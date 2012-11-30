@@ -1,1 +1,5 @@
-grunt-uRequire\n==============
+
+grunt-urequire
+==============
+
+Grunt wrapper for uRequire
