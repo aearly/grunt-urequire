@@ -4,9 +4,11 @@ var expect = require("expect.js"),
 
 describe("Test project 1:", function () {
 	it("should build properly", function (done) {
+		this.timeout(5000);
 		exec("grunt --config " + __dirname + "/../examples/test/grunt.js", function (err, stdout, stderr) {
 			console.log(stderr + stdout);
 			expect(err).to.equal(null);
+			done();
 		});
 	});
 });

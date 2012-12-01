@@ -25,18 +25,18 @@ module.exports = function (grunt) {
     urequire: {
       umd: {
         bundlePath: "lib/",
-        outputPath: "umdLib/",
+        outputPath: "umdLib/"
+      },
+      amd: {
+        bundlePath: "lib/",
+        outputPath: "amdLib/"
+      },
+      options: {
         scanAllow: true,
         allNodeRequires: true,
         verbose: true,
         Continue: false,
         webRootMap: "lib/"
-      },
-      amd: {
-        bundlePath: "lib/",
-        outputPath: "amdLib/",
-        allNodeRequires: true,
-        verbose: false
       }
     }
     /*browserify: {
