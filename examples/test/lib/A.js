@@ -1,5 +1,6 @@
-var _ = require("underscore");
+define(["underscore"], function (_) {
 
-module.exports = _.map("qwer,asdf,zxvc".split(), function (word, i) {
-	return "[" + i + "] " + word;
+	return _.map("qwer,asdf,zxvc".split(), function (word, i) {
+		return "[" + i + "] " + word;
+	});
 });

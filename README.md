@@ -9,17 +9,14 @@ Example config:
 
     grunt.initConfig({
       urequire: {
-        umd: {
+        UMD: {
           bundlePath: "lib/",
           outputPath: "umdLib/"
-        },
-        amd: {
-          bundlePath: "lib/",
-          outputPath: "amdLib/"
         },
         options: {
           scanAllow: true,
           allNodeRequires: true,
+          noExports: true,
           verbose: true,
           Continue: false,
           webRootMap: "lib/"
