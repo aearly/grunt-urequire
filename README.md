@@ -2,7 +2,7 @@
 grunt-urequire
 ==============
 
-Grunt wrapper for uRequire
+Grunt wrapper for uRequire, version ~0.2.x
 
 
 Example config:
