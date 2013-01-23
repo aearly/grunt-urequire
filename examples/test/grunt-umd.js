@@ -3,7 +3,7 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     urequire: {
-      UMD: {
+      UMD: { // using the old DEPRECATED v0.1.x format
         bundlePath: "lib/",
         outputPath: "umdLib/"
       },
@@ -16,15 +16,6 @@ module.exports = function (grunt) {
         webRootMap: "lib/"
       }
     }
-    /*browserify: {
-      "dist/bundle.js": {
-        requires: ["traverse"],
-        aliases: ["jquery:jquery-browserify"],
-        entries: ["src/*.js"],
-        prepend: ["<banner:meta.banner>"],
-        append: [],
-      }
-    }*/
   });
 
   // Load task.

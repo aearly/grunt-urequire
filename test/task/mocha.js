@@ -12,6 +12,7 @@ module.exports = function (grunt) {
 
     options.growl = true;
     options.reporter = "spec";
+    options.timeout = 8000;
 
     mocha_instance = new Mocha(options);
     paths.map(mocha_instance.addFile.bind(mocha_instance));

@@ -2,18 +2,17 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    urequire: { // using the old DEPRECATED v0.1.x format
-      AMD: {
+    urequire: {
+      combined: {
+        template:'combined', // using the new v0.3.x format
         bundlePath: "lib/",
-        outputPath: "amdLib/"
-      },
-      options: {
+        main: 'A',
+        outputPath: "combinedLib.js",
         scanAllow: true,
         allNodeRequires: true,
-        noExports: true,
-        verbose: true,
-        Continue: false,
-        webRootMap: "lib/"
+        rootExports: false,
+        debugLevel:90,
+        verbose: true
       }
     }
   });
