@@ -2,7 +2,7 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    urequire: {
+    urequire: { // using the old DEPRECATED v0.1.x format
       nodejs: {
         bundlePath: "lib/",
         outputPath: "nodeLib/"
@@ -15,15 +15,6 @@ module.exports = function (grunt) {
         Continue: false
       }
     }
-    /*browserify: {
-      "dist/bundle.js": {
-        requires: ["traverse"],
-        aliases: ["jquery:jquery-browserify"],
-        entries: ["src/*.js"],
-        prepend: ["<banner:meta.banner>"],
-        append: [],
-      }
-    }*/
   });
 
   // Load task.
