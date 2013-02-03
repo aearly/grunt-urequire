@@ -1,10 +1,11 @@
 # Supporting uRequire ver >=0.3.0
 "use strict"
 
-_ = require("lodash")
 urequire = require 'urequire'
 
 module.exports = (grunt) ->
+
+  _ = grunt.util._
 
   grunt.registerMultiTask "urequire", "Convert javascript modules using uRequire", ->
 
