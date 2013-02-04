@@ -1,14 +1,14 @@
 (function() {
   "use strict";
 
-  var urequire, _,
+  var urequire,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  _ = require("lodash");
 
   urequire = require('urequire');
 
   module.exports = function(grunt) {
+    var _;
+    _ = grunt.util._;
     return grunt.registerMultiTask("urequire", "Convert javascript modules using uRequire", function() {
       /* DEPRECATED OLD FORMAT CONFIG
       */
