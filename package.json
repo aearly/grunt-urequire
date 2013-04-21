@@ -10,13 +10,31 @@
     "type": "git",
     "url": "https://github.com/aearly/grunt-urequire"
   },
-  "keywords": [ "gruntplugin", "grunt", "urequire",
-                "modules", "module", "modular", "format",
-                "convert", "converter", "conversion",
-                "commonjs", "AMD", "UMD", "UMDjs",
-                "requirejs","require", "define", "umdify",
-                "nodefy", "browserify", "dependency", "dependencies",
-                "bundle", "package"
+  "keywords": [
+    "gruntplugin",
+    "grunt",
+    "urequire",
+    "modules",
+    "module",
+    "modular",
+    "format",
+    "convert",
+    "converter",
+    "conversion",
+    "commonjs",
+    "AMD",
+    "UMD",
+    "UMDjs",
+    "requirejs",
+    "require",
+    "define",
+    "umdify",
+    "nodefy",
+    "browserify",
+    "dependency",
+    "dependencies",
+    "bundle",
+    "package"
   ],
   "author": "Alexander Early <alexander.early@gmail.com>",
   "contributors": [
@@ -27,10 +45,11 @@
   ],
   "license": "BSD",
   "devDependencies": {
-    "grunt-contrib-coffee": "*",
-    "grunt": "~0.3.17",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt": "~0.4.1",
     "mocha": "~1.7.2",
-    "expect.js": "~0.2.0"
+    "expect.js": "~0.2.0",
+    "grunt-simple-mocha": "~0.4.0"
   },
   "dependencies": {
     "urequire": "~0.3"

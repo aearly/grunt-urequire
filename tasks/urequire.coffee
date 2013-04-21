@@ -14,12 +14,13 @@ module.exports = (grunt) ->
     if (@target is 'options') and (_.any grunt.config.get("urequire"), (val, key)->
       key in urequire.Build.templates)
 
-        grunt.log.writeln """
-          You are using a *deprecated* grunt-urequire format in your gruntfile.
-          Should still work, but you should change it to uRequire/grunt-urequire version v0.3 and above.
+      grunt.log.writeln """
+        You are using a *deprecated* grunt-urequire format in your gruntfile.
+        Should still work, but you should change it to uRequire/grunt-urequire
+        version v0.3 and above.
 
-          Ignoring bogus 'options' task.
-        """
+        Ignoring bogus 'options' task.
+      """
     else
       # detect old format & transform it to the new
       if @target in urequire.Build.templates and grunt.config.get("urequire.options")
@@ -28,7 +29,8 @@ module.exports = (grunt) ->
         @data.template = @target
         grunt.log.writeln """
           You are using a *deprecated* grunt-urequire format in your gruntfile.
-          Should still work, but you should change it to uRequire/grunt-urequire version v0.3 and above.
+          Should still work, but you should change it to uRequire/grunt-urequire
+          version v0.3 and above.
 
           Transformed @data is:
           #{JSON.stringify @data, null, ' '}
@@ -39,7 +41,8 @@ module.exports = (grunt) ->
       @data.done = (doneVal)->
         grunt.log.ok 'grunt-urequire task is done()' if doneVal is true
         done doneVal
-        #@todo:1,5 add 'done' to uRequireCOnfig - store it from @data{} first, call it before this done()
+        #@todo:1,5 add 'done' to uRequireCOnfig - store it from @data{} first,
+        #call it before this done()
 
       bb = new urequire.BundleBuilder @data, # grunt's config
         grunt.config.get("urequire._defaults"), # grunt's _defaults config

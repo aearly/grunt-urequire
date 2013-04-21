@@ -8,6 +8,7 @@
 
   module.exports = function(grunt) {
     var _;
+    console.log(Object.keys(grunt));
     _ = grunt.util._;
     return grunt.registerMultiTask("urequire", "Convert javascript modules using uRequire", function() {
       /* DEPRECATED OLD FORMAT CONFIG
@@ -17,13 +18,13 @@
       if ((this.target === 'options') && (_.any(grunt.config.get("urequire"), function(val, key) {
         return __indexOf.call(urequire.Build.templates, key) >= 0;
       }))) {
-        return grunt.log.writeln("You are using a *deprecated* grunt-urequire format in your gruntfile.\nShould still work, but you should change it to uRequire/grunt-urequire version v0.3 and above.\n\nIgnoring bogus 'options' task.");
+        return grunt.log.writeln("You are using a *deprecated* grunt-urequire format in your gruntfile.\nShould still work, but you should change it to uRequire/grunt-urequire\nversion v0.3 and above.\n\nIgnoring bogus 'options' task.");
       } else {
         if ((_ref = this.target, __indexOf.call(urequire.Build.templates, _ref) >= 0) && grunt.config.get("urequire.options")) {
           this.data = _.clone(this.data, true);
           _.extend(this.data, grunt.config.get("urequire.options"));
           this.data.template = this.target;
-          grunt.log.writeln("You are using a *deprecated* grunt-urequire format in your gruntfile.\nShould still work, but you should change it to uRequire/grunt-urequire version v0.3 and above.\n\nTransformed @data is:\n" + (JSON.stringify(this.data, null, ' ')));
+          grunt.log.writeln("You are using a *deprecated* grunt-urequire format in your gruntfile.\nShould still work, but you should change it to uRequire/grunt-urequire\nversion v0.3 and above.\n\nTransformed @data is:\n" + (JSON.stringify(this.data, null, ' ')));
         }
         /* The 'real' grunt-urequire task
         */

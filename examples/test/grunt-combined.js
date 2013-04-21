@@ -18,7 +18,7 @@ module.exports = function (grunt) {
   });
 
   // Load task.
-  grunt.loadTasks("../../tasks");
+  grunt.loadTasks(__dirname + "/../../tasks");
 
   // Default task.
   grunt.registerTask("default", "urequire");
