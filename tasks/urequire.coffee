@@ -11,8 +11,7 @@ module.exports = (grunt) ->
 
     ### DEPRECATED OLD FORMAT CONFIG ###
     # detect old format's 'options':
-    if (@target is 'options') and (_.any grunt.config.get("urequire"), (val, key)->
-      key in urequire.Build.templates)
+    if (@target is 'options') and (_.any grunt.config.get("urequire"), (val, key)-> key in urequire.Build.templates)
 
       grunt.log.writeln """
         You are using a *deprecated* grunt-urequire format in your gruntfile.
@@ -36,17 +35,49 @@ module.exports = (grunt) ->
           #{JSON.stringify @data, null, ' '}
         """
 
+
       ### The 'real' grunt-urequire task ###
-      done = @async()
-      @data.done = (doneVal)->
-        grunt.log.ok 'grunt-urequire task is done()' if doneVal is true
-        done doneVal
-        #@todo:1,5 add 'done' to uRequireCOnfig - store it from @data{} first,
-        #call it before this done()
+      if @target[0] isnt '_' # check its not a derived/default, staring with _
 
-      bb = new urequire.BundleBuilder @data, # grunt's config
-        grunt.config.get("urequire._defaults"), # grunt's _defaults config
-        bundle: bundleName:@target # just add @target as bundleName if missing
+        done = @async()
+        @data.done = dataDone = do(taskName=@target)->
+          (doneVal)->
+            if doneVal is true
+              grunt.log.ok "grunt-urequire task '#{taskName}' is done(:-)"
+            else
+              grunt.log.error "grunt-urequire task '#{taskName}' has errors ):-("
+            done doneVal
+            #@todo:1,5 add 'done' to uRequireCOnfig - store it from @data{} first,
+            #call it before this done()
 
-      bb.buildBundle()
+        configParams = []
 
+        gatherDeriveConfigs = (config)->
+          if _.isObject config # better safe that sorry
+            configParams.push config
+
+            if config.derive
+              config.derive = [config.derive] if not _.isArray(config.derive) #convert '_myDefault' to ['_myDefault']
+
+              # add all derived objects to configParams
+              for drv in config.derive # drv is the label eg 'myDerived'
+                if cfgObject = grunt.config.get("urequire.#{drv}") #todo: support root level grunt objects (eg RequireJs) using '/' ?
+                  gatherDeriveConfigs cfgObject  #recurse
+                else
+                  grunt.log.error "derive '#{drv}' not found in grunt's config, while processing derive array ['#{config.derive.join "', '"}']"
+                  dataDone false
+
+        gatherDeriveConfigs @data # grunt's data under current @target
+
+        # assume '_defaults' if no `derive`s exist on current @target
+        gatherDeriveConfigs {derive: '_defaults'} if _.isUndefined @data.derive
+
+
+        # add @target as default `bundleName` if its missing
+        configParams.push {bundle: bundleName: @target}
+
+        # using 'new' with `apply` http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
+        configParams.unshift null # needed as 1st item for `new` & `apply` below
+        bb = new (Function.prototype.bind.apply urequire.BundleBuilder, configParams)
+
+        bb.buildBundle()
