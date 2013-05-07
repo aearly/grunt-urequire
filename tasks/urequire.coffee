@@ -1,6 +1,7 @@
 # Supporting uRequire ver >=0.3.0
 "use strict"
 
+_fs = require 'fs'
 urequire = require 'urequire'
 
 module.exports = (grunt) ->
@@ -14,7 +15,7 @@ module.exports = (grunt) ->
     if (@target is 'options') and (_.any grunt.config.get("urequire"), (val, key)-> key in urequire.Build.templates)
 
       grunt.log.writeln """
-        You are using a *deprecated* grunt-urequire format in your gruntfile.
+        You are using a *DEPRACATED* grunt-urequire format in your gruntfile.
         Should still work, but you should change it to uRequire/grunt-urequire
         version v0.3 and above.
 
@@ -27,7 +28,7 @@ module.exports = (grunt) ->
         _.extend @data, grunt.config.get("urequire.options")
         @data.template = @target
         grunt.log.writeln """
-          You are using a *deprecated* grunt-urequire format in your gruntfile.
+          You are using a *DEPRACATED* grunt-urequire format in your gruntfile.
           Should still work, but you should change it to uRequire/grunt-urequire
           version v0.3 and above.
 
@@ -50,34 +51,45 @@ module.exports = (grunt) ->
             #@todo:1,5 add 'done' to uRequireCOnfig - store it from @data{} first,
             #call it before this done()
 
-        configParams = []
-
-        gatherDeriveConfigs = (config)->
-          if _.isObject config # better safe that sorry
-            configParams.push config
-
-            if config.derive
-              config.derive = [config.derive] if not _.isArray(config.derive) #convert '_myDefault' to ['_myDefault']
-
-              # add all derived objects to configParams
-              for drv in config.derive # drv is the label eg 'myDerived'
-                if cfgObject = grunt.config.get("urequire.#{drv}") #todo: support root level grunt objects (eg RequireJs) using '/' ?
-                  gatherDeriveConfigs cfgObject  #recurse
+        gruntDeriveReader = (derive)->
+            if _.isString derive
+              if cfgObject = grunt.config.get("urequire.#{derive}") # @todo: support root level grunt objects (eg RequireJs) using '/' ?
+                cfgObject
+              else
+                if cfgObject = require _fs.realpathSync derive      # @todo: test `require` is using butter-require within uRequire :-)
+                  cfgObject
                 else
-                  grunt.log.error "derive '#{drv}' not found in grunt's config, while processing derive array ['#{config.derive.join "', '"}']"
+                  grunt.log.error """
+                    Error loading configuration files:
+                      derive '#{derive}' not found in grunt's config, nor is a valid filename
+                      while processing derive array ['#{config.derive.join "', '"}']"
+                    """
                   dataDone false
+            else
+              if _.isPlainObject derive
+                derive
+              else
+                grunt.log.error """
+                  Error loading configuration files:
+                    Unknown derive :\n #{derive}
+                    while processing derive array ['#{config.derive.join "', '"}']
+                  """
+                dataDone false
 
-        gatherDeriveConfigs @data # grunt's data under current @target
+        #init our grunt-urequire with 3 configs:
+        configs = [
+          # grunt's data under current @target
+          @data
 
-        # assume '_defaults' if no `derive`s exist on current @target
-        gatherDeriveConfigs {derive: '_defaults'} if _.isUndefined @data.derive
+          # assume '_defaults' if no `derive`s exist on current @target
+          if _.isUndefined(@data.derive) and grunt.config.get("urequire._defaults")
+              {derive: '_defaults'}
+          else
+            {}
 
+          # add @target as default `bundleName` if its missing
+          {bundleName: @target}
+        ]
 
-        # add @target as default `bundleName` if its missing
-        configParams.push {bundle: bundleName: @target}
-
-        # using 'new' with `apply` http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
-        configParams.unshift null # needed as 1st item for `new` & `apply` below
-        bb = new (Function.prototype.bind.apply urequire.BundleBuilder, configParams)
-
+        bb = new urequire.BundleBuilder configs, gruntDeriveReader
         bb.buildBundle()
