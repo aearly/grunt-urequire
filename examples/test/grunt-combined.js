@@ -3,16 +3,19 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     urequire: {
-      combined: {
-        template:'combined', // using the new v0.3.x format
-        bundlePath: "lib/",
-        main: 'A',
-        outputPath: "combinedLib.js",
+      _defaults: {
         scanAllow: true,
         allNodeRequires: true,
         rootExports: false,
-        debugLevel:90,
+        debugLevel: 40,
         verbose: true
+      },
+
+      myCombinedLib: {
+        template:'combined', // using the new v0.3.x format
+        bundlePath: "lib/",
+        main: 'A',
+        outputPath: "combinedLib.js"
       }
     }
   });
