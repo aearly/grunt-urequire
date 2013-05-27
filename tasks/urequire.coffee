@@ -1,4 +1,4 @@
-# Supporting uRequire ver >=0.3.0
+# Supporting uRequire ver 0.3.0beta1 / 0.3.0beta2
 "use strict"
 
 _fs = require 'fs'
