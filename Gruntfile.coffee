@@ -1,21 +1,16 @@
 module.exports = (grunt) ->
+  _ = grunt.util._
+
   grunt.initConfig
     simplemocha:
       src: ["test/*.test.js"]
 
-    coffee:
-      compile:
-        files:
-          "tasks/urequire.js": "tasks/urequire.coffee"
+  ## coffeescript compilation no longer need for grunt tasks - they work as is
 
-#          @todo: NOT WORKING - WHY ? https://github.com/gruntjs/grunt-contrib-coffee
-#          expand: true
-#          cwd: 'tasks/'
-#          src: ['**/*.coffee']
-#          dest: 'tasks/'
-#          ext: '.js'
+  ### shortcuts generation ###
+  splitTasks = (tasks)-> if !_.isString tasks then tasks else (_.filter tasks.split(' '), (v)-> v)
 
-  grunt.loadNpmTasks "grunt-contrib-coffee"
-  grunt.loadNpmTasks "grunt-simple-mocha"
+  grunt.registerTask "default", ["simplemocha"]
   grunt.loadTasks    "test/task"
-  grunt.registerTask "default", ["coffee", "simplemocha"]
+  grunt.loadNpmTasks "grunt-simple-mocha"
+
