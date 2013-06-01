@@ -8,13 +8,13 @@ Example config (using the new uRequire > v0.3.0beta1 format) :
     urequire:{
       myLibAsUMD: {
         template: "UMD", // default, can be ommited
-        bundlePath: "lib/",
+        path: "lib/",
         outputPath: "umdLib"
       },
 
       myLibCombinedToWorkEverywhere: {
         template:'combined',
-        bundlePath: "lib/",
+        path: "lib/",
         main: 'myLibraryMain-Index',
         outputPath: "combinedLib.js"
       },
@@ -24,7 +24,7 @@ Example config (using the new uRequire > v0.3.0beta1 format) :
         verbose: true,
         scanAllow: true,
         allNodeRequires: true,
-        rootExports: false
+        noRootExports: false
       }
     }
 ```
@@ -40,10 +40,10 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
       # @note On `derive`: a) dont use cyclic references. b) file referenced path is ALWAYS relative to the initial path (the path used for 1st file/grunt config), instead of the file referencing the referenced one. Both will be fixed :-)
       _defaults:
         bundle:
-          bundlePath: "/source/code"
+          path: "/source/code"
           ignore: [/^draft/, 'uRequireConfig_UMDBuild.json', 'uRequireConfig.coffee'] # completelly ignore these
           dependencies:
-            bundleExports: #['lodash', 'agreement/isAgree'] # simple syntax
+            exports: bundle: #['lodash', 'agreement/isAgree'] # simple syntax
               'lodash':"_",                               # precise syntax
               'agreement/isAgree': 'isAgree'
             noWeb: ['util']
@@ -94,10 +94,10 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
 
       # uRequire-ing the specs: we also have two build as 'UMD' & as 'combined'
       spec: # deep inherits all '_defaults', by default :-)
-        bundlePath: "source/spec"
+        path: "source/spec"
         outputPath: "build/spec"
         dependencies:
-          bundleExports:
+          exports: bundle:
             chai: 'chai'
             lodash: '_'
             uberscore: '_B'
