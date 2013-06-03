@@ -1,4 +1,4 @@
-# Supporting uRequire ver 0.4.0alpha0
+# Supporting uRequire ver 0.4.0alpha13
 "use strict"
 fs = require 'fs'
 path = require 'path'
@@ -19,14 +19,26 @@ module.exports = (grunt) ->
   if not urequire.gruntTask.isWatchSet # register only once (grunt-watch 0.4.3 error)?
     urequire.gruntTask.isWatchSet = true
     grunt.verbose.writeln "uRequire: Registering grunt.event.on 'watch'"
-
+    nonTargets = ['filesWatch1st', 'isWatchSet', 'isMultiTaskSet']
     grunt.event.on 'watch', (action, file)->
-      grunt.verbose.writeln file + ' has ' + action
-      urequire.gruntTask.filesWatch or= {}
-#      fwActionFiles = urequire.gruntTask.filesWatch[action] or= []
-#      fwActionFiles.push file
-      fwAllFiles = urequire.gruntTask.filesWatch['all'] or= []
-      fwAllFiles.push file
+      grunt.verbose.writeln "uRequire: File '#{file}' has #{action}"
+
+      # do we have any target with filesWatch ?
+      if (_.any urequire.gruntTask, (target)-> target.filesWatch) # isnt undefined
+
+        grunt.verbose.writeln "uRequire: adding '#{file}' to all urequire.gruntTask[@target].filesWatch"
+
+        for target, targetHash of urequire.gruntTask when not (target in nonTargets)
+            grunt.verbose.writeln "uRequire: adding #{file} to urequire.gruntTask['#{target}'].filesWatch"
+            targetHash.filesWatch.push file # assume all targetHash have a [], flushed when they are used to build
+
+        delete urequire.gruntTask.filesWatch1st #dont need that anymore, only 1st time
+
+        grunt.verbose.writeln 'uRequire: tasks in urequire.gruntTask =', _.omit urequire.gruntTask, nonTargets
+
+      else # grunt tasks have not run yet
+        grunt.verbose.writeln "uRequire: adding #{file} to filesWatch1st"
+        (urequire.gruntTask.filesWatch1st or= []).push file
 
   # register once, a grunt multiTask
   if not urequire.gruntTask.isMultiTaskSet # register only once
@@ -134,20 +146,26 @@ module.exports = (grunt) ->
           bundleBuilder.build.done = taskRunDone
 
           # check nightWatch :-)
-          filesWatch = urequire.gruntTask.filesWatch
-          if not _.isEmpty filesWatch   # we have a 'watch' event and files that need to be refreshed
+          # have we accumulated 'watch' events / files that need to be refreshed ?
+          if not filesWatch = urequire.gruntTask?[@target]?.filesWatch #not for task @target
+            filesWatch = urequire.gruntTask?[@target]?.filesWatch = urequire.gruntTask.filesWatch1st
 
-            changedFiles = _.map (_.unique filesWatch.all), (file)-> # accept only unique files
-              path.relative bundleBuilder.bundle.path, file          # with cwd being `bundle.path`
+#            if not filesWatch
+#              filesWatch = urequire.gruntTask[@target].filesWatch = []
+          grunt.verbose.writeln "uRequire: @target = #{@target}, filesWatch = ", filesWatch
+
+          if not _.isEmpty filesWatch
+            changedFiles = _.map (_.unique filesWatch), (file)-> # accept only unique files
+              path.relative bundleBuilder.bundle.path, file      # with cwd being `bundle.path`
 
             grunt.verbose.writeln "grunt-urequire: changedFiles= \n", changedFiles
-            urequire.gruntTask.filesWatch = {} # reset filesWatch - considered as processed
-
+            urequire.gruntTask[@target].filesWatch = [] # reset filesWatch - considered as processed
             bundleBuilder.build.watch = 'grunt-urequire'
             bundleBuilder.buildBundle changedFiles
-          else
-            if not filesWatch # undefined filewatch means we' arent watching at all
-              bundleBuilder.buildBundle() # full build
+
+          else # empty filesWatch - why ?
+            if (not filesWatch) # undefined, means we' arent watching at all (no filesWatch1st, nor @target's)
+                bundleBuilder.buildBundle() # full build, no watching
             else
-              grunt.log.writeln "grunt-urequire: IGNORING BOGUS call, while watching: no watched files were changed!"
+              grunt.log.writeln "grunt-urequire: IGNORING BOGUS call:no watched files were changed! Use debounceDelay: x000 ?"
               taskRunDone true # task SHOULDN'T have been called, but just finish it
