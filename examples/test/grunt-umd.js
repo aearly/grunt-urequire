@@ -4,7 +4,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     urequire: {
       UMD: { // using the old DEPRECATED v0.1.x format
-        bundlePath: "lib/",
+        path: "lib/",
         outputPath: "umdLib/"
       },
       options: {

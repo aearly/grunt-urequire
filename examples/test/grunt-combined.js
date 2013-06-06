@@ -13,7 +13,7 @@ module.exports = function (grunt) {
 
       myCombinedLib: {
         template:'combined', // using the new v0.3.x format
-        bundlePath: "lib/",
+        path: "lib/",
         main: 'A',
         outputPath: "combinedLib.js"
       }

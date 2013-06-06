@@ -4,7 +4,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     urequire: { // using the old DEPRECATED v0.1.x format
       nodejs: {
-        bundlePath: "lib/",
+        path: "lib/",
         outputPath: "nodeLib/"
       },
       options: {
