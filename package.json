@@ -54,6 +54,6 @@
 
   },
   "dependencies": {
-    "urequire": "~0.4.0"
+    "urequire": "0.4.0"
   }
 }
