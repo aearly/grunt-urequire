@@ -1,7 +1,35 @@
-grunt-urequire 0.4.4
+# grunt-urequire 0.4.5
 ==============
 
 Grunt wrapper for [uRequire](https://github.com/anodynos/uRequire), version >= v0.4.0
+
+*Requires grunt 0.4.x*
+
+## Features
+
+### config objects
+
+uRequire [config objects](http://urequire.org/urequireconfigmasterdefaults.coffee#config-usage) can become grunt tasks, as-is from the file format.
+
+### Watching
+
+You can use `grunt-contrib-watch` watch task to invoke a partial build of changed files only.
+
+Notes:
+
+  * You need `watch: xxx: options: nospawn: true`.
+
+  * You DONT need `urequire: xxx: build: watch: true`
+
+  * At each `watch` event there is a *partial build* carried out.
+
+  For non-`combined`-templates you are advised to have a full build run before watch (eg run the `urequire:xxx` grunt task before running `watch: xxx: tasks: ['urequire:xxx']`) within the same invocation of grunt. For example run `grunt urequire:xxx watch:xxx`) so that all modules & their dependencies are loaded.
+
+  For `combined` template builds, a full build is enforced the 1st time by urequire and you SHOULD NOT have run the task before the watch - i.e just use `grunt watch:myCombinedBuildWatchTask` where `watch: myCombinedBuildWatchTask: tasks: ['urequire:myCombinedBuild']`.
+
+## Examples
+
+### Simple example
 
 Example config (using the new uRequire >= v0.4.0 format) :
 
@@ -33,10 +61,17 @@ Example config (using the new uRequire >= v0.4.0 format) :
 
 * Note the new format - version 1.x grunt-urequire format should still be supported, but DEPRECATED.*
 
-A more involved example (in coffeescript), taken from [uBerscore](http://github.com/anodynos/uBerscore). Its also using `grunt-contrib-watch` to watch and build changed files as needed.
+### uBerscore Example
+
+A more involved example (in coffeescript), taken from [uBerscore](http://github.com/anodynos/uBerscore).
+
+Its also using `grunt-contrib-watch` to watch and build changed files as needed (partial build).
 
 ```coffeescript
 
+    ###
+      uRequire config for uBerscore is used as a testbed & example, thus so many comments :-)
+    ###
     urequire:
       # These are the defaults, when a task has no 'derive' at all. Use derive:[] to skip deriving it.
       # @note that any urequire task starting with '_' is ignored as a grunt target and only used for `derive`-ing.
@@ -46,6 +81,14 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
           path: "#{sourceDir}"
           filez: ['**/*.*', '!**/draft/*.*', '!uRequireConfig*']
           copy: [/./]
+          resources: [                           # example: declaring resource converter to perform some 'concat/inject' job.
+            [ '*inject VERSION to uberscore.js', # inject the VERSION variable inside the module's code, BEFORE running the template
+              ['uberscore.js']  # note we are looking to change the converted `uberscore.js` (not `uberscore.coffee`)
+              (source)-> """var VERSION = '#{ pkg.version }'; //injected by urequire resource\n
+                            #{source}"""
+              # no dstFilename converter needed
+            ]
+          ]
           dependencies:
             node: 'util'   # 'util' will not be added to deps array, will be available only on nodejs execution. Same as 'node!myDep'
             exports:
@@ -55,7 +98,8 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
 
         build:
           verbose: false # false is default
-          debugLevel: 0 # 0 is default
+          debugLevel: 40 # 0 is default
+#          continue: true
 
       # a simple UMD build
       uberscoreUMD:
@@ -63,6 +107,14 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
         #'derive': ['_defaults'] # not needed - by default it deep uDerives all '_defaults'. To avoid use `derive:[]`.
           #template: 'UMD' # Not needed - 'UMD' is default
           dstPath: "#{buildDir}"
+
+          resources: [ # example: perform some 'concat' job.
+            [ '*!concat/add banner to uberscore.js', # '!' means 'isAfterTemplate: true'
+              ['uberscore.js']                       # note we are looking to change the dstFilename `uberscore.js` (not `uberscore.coffee`)
+              (source, srcFilename)->"#{banner}\n#{source}"
+              #no dstFilename converter needed
+            ]
+          ]
 
       # a 'combined' build, that also works without AMD loaders on Web
       uberscoreDev:
@@ -98,6 +150,16 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
         template: 'UMD'
         dstPath: 'build/anotherUMDBuild'
 
+      # An example of building only a sub-tree of the whole bundle.
+      # Here we want to build only Logger (& its dependencies) in a 'combined' build using almond.
+      # So we need `main: 'Logger'`, which is infered from grunt task/target name
+      # @todo: Its somewhat ineffiecient in urequire 0.4, cause all modules are converted to AMD, used as input to rjs.optimize
+      # which only picks the dependent ones. Future urequire version should fix this.
+      Logger: # bundle.main & consequently bundle.name inherit task/target 'Logger' name
+        template: 'combined'
+        optimize: true
+        dstPath: 'build/Logger-min.js'
+
       # uRequire-ing the specs: we also have two build as 'UMD' & as 'combined'
       spec: # deep inherits all '_defaults', by default :-)
         path: "#{sourceSpecDir}"
@@ -110,7 +172,6 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
             uberscore: '_B'
             'spec-data': 'data'
             # assert = chai.assert # @todo(for uRequire 4 5 5) allow for . notation to refer to export!
-        #debugLevel: 90  # 0 is default
 
       specCombined:
         derive: ['spec'] # deep inherits all of 'spec' BUT none of '_defaults':-)
@@ -126,8 +187,8 @@ A more involved example (in coffeescript), taken from [uBerscore](http://github.
     watch:
       urequireDev:
         files: ["#{sourceDir}/**/*.*", "#{sourceSpecDir}/**/*.*" ] # new subdirs dont work - https://github.com/gruntjs/grunt-contrib-watch/issues/70
-        tasks: ['urequire:uberscoreUMD', 'urequire:spec', 'mocha'] #, 'urequire:uberscoreDev']
-        options: nospawn: true                                     # works only with `nospawn: true`
+        tasks: ['urequire:uberscoreDev'] #, 'urequire:spec', 'mocha']
+        options: nospawn: true
 
 ```
 
