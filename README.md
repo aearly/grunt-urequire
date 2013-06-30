@@ -192,4 +192,4 @@ Its also using `grunt-contrib-watch` to watch and build changed files as needed 
 
 ```
 
-Look for more documentation on [uRequire.org](https://uRequire.org)'s docs (WIP).
+Look for more documentation on [uRequire.org](http://uRequire.org)'s docs (WIP).
