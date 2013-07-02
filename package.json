@@ -48,12 +48,12 @@
     "grunt": "~0.4.1",
     "mocha": "~1.7.2",
     "underscore": "*",
-    "uberscore": "0.0.10",
     "expect.js": "~0.2.0",
     "grunt-simple-mocha": "~0.4.0"
 
   },
   "dependencies": {
+    "uberscore": "0.0.10",
     "urequire": "0.4.x"
   }
 }
