@@ -1,4 +1,4 @@
-# grunt-urequire 0.4.5
+# grunt-urequire 0.4.6
 ==============
 
 Grunt wrapper for [uRequire](https://github.com/anodynos/uRequire), version >= v0.4.0
