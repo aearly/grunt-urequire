@@ -1,6 +1,6 @@
 {
   "name": "grunt-urequire",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "A Grunt wrapper around uRequire <https://github.com/anodynos/uRequire>",
   "main": "tasks/urequire.coffee",
   "scripts": {
@@ -53,7 +53,7 @@
 
   },
   "dependencies": {
-    "uberscore": "0.0.10",
-    "urequire": "0.4.x"
+    "uberscore": "0.0.12",
+    "urequire": "0.5.x"
   }
 }

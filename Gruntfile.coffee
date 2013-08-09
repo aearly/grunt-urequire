@@ -5,8 +5,6 @@ module.exports = (grunt) ->
     simplemocha:
       src: ["test/*.test.js"]
 
-  ## coffeescript compilation no longer need for grunt tasks - they work as is
-
   ### shortcuts generation ###
   splitTasks = (tasks)-> if !_.isString tasks then tasks else (_.filter tasks.split(' '), (v)-> v)
 
