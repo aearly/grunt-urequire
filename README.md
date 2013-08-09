@@ -9,7 +9,7 @@ Grunt wrapper for [uRequire](https://github.com/anodynos/uRequire), version >= v
 
 ### config objects
 
-uRequire [config objects](http://urequire.org/urequireconfigmasterdefaults.coffee#config-usage) can become grunt tasks, as-is from the file format.
+uRequire [config objects](http://urequire.org/masterdefaultsconfig.coffee#config-usage) can become grunt tasks, as-is from the file format.
 
 ### Watching
 
