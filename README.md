@@ -1,7 +1,7 @@
-# grunt-urequire 0.6.0
+# grunt-urequire 0.6.1
 ==============
 
-Grunt wrapper for [uRequire](https://github.com/anodynos/uRequire), version >= v0.6.0
+Grunt wrapper for [uRequire](https://github.com/anodynos/uRequire), version >= v0.6.11
 
 *Requires grunt 0.4.x*
 
@@ -34,13 +34,13 @@ Example config (using the uRequire >= v0.4.0 format) :
     urequire:{
       myLibAsUMD: {
         template: "UMD", // default, can be ommited
-        path: "lib/",
+        path: "lib",
         dstPath: "umdLib"
       },
 
       myLibCombinedToWorkEverywhere: {
         template:'combined',
-        path: "lib/",
+        path: "lib",
         main: 'myLibraryMain-Index',
         dstPath: "combinedLib.js"
       },
