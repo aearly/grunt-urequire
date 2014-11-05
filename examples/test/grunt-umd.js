@@ -4,15 +4,14 @@ module.exports = function (grunt) {
   grunt.initConfig({
     urequire: {
       UMD: { // using the old DEPRECATED v0.1.x format
-        path: "lib/",
-        outputPath: "umdLib/"
+        path: "lib",
+        outputPath: "build/umdLib"
       },
-      options: {
+      _defaults: {
         scanAllow: true,
         allNodeRequires: true,
         rootExports: false,
         verbose: true,
-        Continue: false,
         webRootMap: "lib/"
       }
     }

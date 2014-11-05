@@ -1,4 +1,0 @@
---reporter spec
---growl
---require expect.js
---timeout 7000

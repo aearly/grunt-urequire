@@ -5,14 +5,14 @@ module.exports = function (grunt) {
     urequire: { // using the old DEPRECATED v0.1.x format
       nodejs: {
         path: "lib/",
-        outputPath: "nodeLib/"
+        outputPath: "build/nodeLib"
       },
-      options: {
+      _defaults: {
         scanAllow: true,
         allNodeRequires: true,
         noExports: true,
         verbose: true,
-        Continue: false
+        continue: false
       }
     }
   });

@@ -1,12 +1,10 @@
 module.exports = (grunt) ->
-  _ = grunt.util._
 
   grunt.initConfig
     simplemocha:
+      options:
+        timeout: 7000
       src: ["test/*.test.js"]
-
-  ### shortcuts generation ###
-  splitTasks = (tasks)-> if !_.isString tasks then tasks else (_.filter tasks.split(' '), (v)-> v)
 
   grunt.registerTask "default", ["simplemocha"]
   grunt.loadTasks    "test/task"

@@ -1,6 +1,6 @@
 {
   "name": "grunt-urequire",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "A Grunt wrapper around uRequire <https://github.com/anodynos/uRequire>",
   "main": "tasks/urequire.coffee",
   "scripts": {
@@ -44,16 +44,18 @@
     }
   ],
   "license": "BSD",
+  "peerDependencies": {
+    "urequire": "^0.7.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.x",
-    "mocha": "*",
+    "mocha": "^2.0.0",
     "underscore": "*",
     "expect.js": "~0.2.0",
     "grunt-simple-mocha": "~0.4.0"
-
   },
   "dependencies": {
-    "uberscore": "0.0.16",
-    "urequire": ">=0.6.11"
+    "compare-semver": "^0.3.3",
+    "uberscore": "0.0.16"
   }
 }

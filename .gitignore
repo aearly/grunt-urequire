@@ -16,6 +16,4 @@ results
 
 npm-debug.log
 
-umdLib
-amdLib
-nodeLib
+examples/test/build/

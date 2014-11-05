@@ -2,17 +2,17 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    urequire: { // using the old DEPRECATED v0.1.x format
+    urequire: {
       AMD: {
         path: "lib/",
-        outputPath: "amdLib/"
+        outputPath: "build/amdLib"
       },
-      options: {
+      _defaults: {
         scanAllow: true,
         allNodeRequires: true,
         noExports: true,
         verbose: true,
-        Continue: false,
+        continue: false,
         webRootMap: "lib/"
       }
     }

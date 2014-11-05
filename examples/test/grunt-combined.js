@@ -7,15 +7,16 @@ module.exports = function (grunt) {
         scanAllow: true,
         allNodeRequires: true,
         rootExports: false,
-        debugLevel: 40,
+        //debugLevel: 40,
         verbose: true
       },
 
       myCombinedLib: {
-        template:'combined', // using the new v0.3.x format
+        template:'combined',
         path: "lib/",
         main: 'A',
-        outputPath: "combinedLib.js"
+        optimize: 'uglify2',
+        outputPath: 'build/combinedLib-min.js'
       }
     }
   });

@@ -1,0 +1,10 @@
+/.idea/
+/node_modules/
+/test/
+/examples/
+/grunt*
+/.npmignore
+/.travis.yml
+/.gitignore
+Gruntfile.*
+
