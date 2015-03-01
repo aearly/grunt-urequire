@@ -1,6 +1,6 @@
 {
   "name": "grunt-urequire",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "A Grunt wrapper around uRequire <https://github.com/anodynos/uRequire>",
   "main": "tasks/urequire.coffee",
   "scripts": {
@@ -45,7 +45,7 @@
   ],
   "license": "BSD",
   "peerDependencies": {
-    "urequire": "^0.7.0",
+    "urequire": "^0.7.0-beta.14",
     "urequire-ab-grunt-contrib-watch": "^0.0.x"
   },
   "devDependencies": {
