@@ -1,20 +1,18 @@
 minUrequireVersion = "0.7.0-beta.11"
 
 fs = require 'fs'
-path = require 'path'
-_ = (_B = require 'uberscore')._
-l = new _B.Logger 'grunt-urequire'
+upath = require 'upath'
+_ = require 'lodash'
 _.mixin (require 'underscore.string').exports()
 
 try
   urequire = require 'urequire'
 catch err
-  l.err """
+  throw """
     grunt-urequire: you 'll need `npm install urequire --save-dev` (version >= 0.7.0) already installed locally.
-    `urequire` is only a `peerDependencies` of `grunt-urequire`.\n""", err
-  throw err
+    `urequire` is only a `peerDependencies` of `grunt-urequire`.\n""" + err.toString()
 
-pkg = JSON.parse fs.readFileSync path.join __dirname, '../package.json'
+pkg = JSON.parse fs.readFileSync upath.join __dirname, '../package.json'
 if require('semver').lt urequire.VERSION, minUrequireVersion
   throw "`urequire` version >= '#{minUrequireVersion}' is needed for `grunt-urequire` v'#{pkg.version}'"
 
@@ -39,18 +37,18 @@ module.exports = (grunt) ->
             derive '#{derive}' not found in grunt's config, nor is a valid filename
             """
     else
-      if _B.isHash derive
+      if _.isPlainObject derive
         derive
       else
         throw new Error """
-          grunt-urequire: Error loading configuration files: Unknown derive :\n #{l.prettify derive}
+          grunt-urequire: Error loading configuration files: Unknown derive :\n #{derive}
         """
   urequire.getGruntConfigsForTarget = (target)->
     data = grunt.config.get("urequire.#{target}")
     [                                                   # init our grunt-urequire with 4 configs:
       {build: target: target}                           # target becomes the mandatory `build.target`
       data                                              # grunt's data under target
-      if _B.isHash(data) and _.isUndefined(data.derive)
+      if _.isPlainObject(data) and _.isUndefined(data.derive)
         grunt.config.get("urequire._defaults")          # _defaults if no other derive, if it exists
       grunt.config.get("urequire._all")                 # _all if exists. undefined is fine
     ]
@@ -84,7 +82,8 @@ module.exports = (grunt) ->
           filesWatch = filesWatch1st # might be null, or have changed files
         if not _.isEmpty filesWatch
           changedFiles = _.map (_.unique filesWatch), (file)-> # accept only unique files
-            path.relative bundleBuilder.bundle.path, file      # with cwd being `bundle.path`
+            upath.relative bundleBuilder.bundle.path, file      # with cwd being `bundle.path`
+
           grunt.verbose.writeln "grunt-urequire: executing a partial build for @target = '#{@target}', changed files relative to bundle.path='#{bundleBuilder.bundle.path}' :\n", changedFiles
           bundleBuilder.filesWatch = [] # reset filesWatch on BB for next time
           bundleBuilder.build.watch.enabled = true # cause it may was invoked through the watch of another bundleBuilder
