@@ -58,7 +58,7 @@
   "dependencies": {
     "lodash": "3.x",
     "semver": "^4.1.0",
-    "underscore.string": "^2.3.3",
+    "underscore.string": "^3.3.5",
     "upath": "^0.1.7"
   }
 }
